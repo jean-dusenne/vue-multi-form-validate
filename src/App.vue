@@ -1,25 +1,13 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
 import FormOne from "./components/FormOne.vue";
 import FormTwo from "./components/FormTwo.vue";
+import { ref } from "vue";
+
+const form1 = ref<any>(null);
+const form2 = ref<any>(null);
 </script>
 
 <template>
-  <FormOne></FormOne>
-  <FormTwo></FormTwo>
+  <FormOne ref="form1" :validate-form-two-fn="form2?.validate"></FormOne>
+  <FormTwo ref="form2" :validate-form-one-fn="form1?.validate"></FormTwo>
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>

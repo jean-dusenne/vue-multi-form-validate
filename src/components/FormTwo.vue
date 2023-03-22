@@ -26,25 +26,12 @@
 
 <script setup lang="ts">
 import { useField, useForm } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/yup";
-import { number, object, ref as yupRef } from "yup";
 import { useGlobalFormsState } from "../composables/useGlobalFormsState";
-import { watch } from "vue";
+import { FormTwoSchemaValidation } from "../composables/FormTwoSchemaValidation";
+
+const props = defineProps<{ validateFormOneFn: any }>();
 
 const { computedFormOne, updateFormTwo } = useGlobalFormsState();
-
-const typedSchema = toTypedSchema(
-  object({
-    number3: number()
-      .nullable()
-      .test((value, context) => {
-        if (!value) return true;
-        return value >= computedFormOne.value.number2;
-      })
-      .max(yupRef("number3")),
-    number4: number().nullable().min(yupRef("number3")),
-  })
-);
 
 const { values, validate, meta } = useForm({
   validateOnMount: true,
@@ -52,24 +39,18 @@ const { values, validate, meta } = useForm({
     number3: null,
     number4: null,
   },
-  validationSchema: typedSchema,
+  validationSchema: FormTwoSchemaValidation(),
+});
+
+defineExpose({
+  validate,
 });
 
 const { errors: errorsNumber3 } = useField("number3");
 const { errors: errorsNumber4 } = useField("number4");
 
-watch(
-  () => computedFormOne.value,
-  (v) => {
-    console.log("validate form 2");
-    validate();
-  },
-  { deep: true }
-);
-
 const update = () => {
   updateFormTwo(values);
+  props.validateFormOneFn();
 };
 </script>
-
-<style scoped></style>

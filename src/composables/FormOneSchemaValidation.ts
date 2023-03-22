@@ -14,7 +14,8 @@ export const FormOneSchemaValidation = () => {
           if (!value) {
             return true;
           }
-          let { computedFormTwo: c2 } = useGlobalFormsState();
+          let { computedFormTwo: c2, validateFormTwoFn } = useGlobalFormsState();
+          //  validateFormTwoFn.value.get('form2')()
           return isLessOrEqual(value, c2.value.number3);
         }),
     })
